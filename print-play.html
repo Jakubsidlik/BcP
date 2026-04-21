@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Print&Play - Hra Math4fun</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pdf-scale: 1;
+    }
+
+    body {
+      font-family: "Times New Roman", Times, serif;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    }
+
+    .pdf-scale-layer {
+      transform: scale(var(--pdf-scale));
+      transform-origin: top center;
+      transition: transform 180ms ease;
+    }
+
+    .pdf-scroll::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .pdf-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        position: static !important;
+        width: 100% !important;
+        height: auto !important;
+      }
+
+      main {
+        margin-left: 0 !important;
+      }
+
+      header {
+        width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen md:flex">
+  <nav class="fixed left-0 top-0 h-screen w-[280px] border-r border-slate-800 bg-[#0F172A] z-50 flex flex-col py-8 px-0 text-white block">
+    <div class="px-6 mb-8">
+      <p class="text-xl font-bold tracking-tight">Bakalářská práce</p>
+      <p class="text-slate-400 text-sm mt-1">Autor: Jakub Šidlík • 2026</p>
+      <p class="text-slate-400 text-sm mt-1">Vedoucí práce: Mgr. Petr Liška. PhD</p>
+      <p class="text-slate-400 text-sm mt-1">Ústav matematiky a statistiky MUNI</p>
+    </div>
+
+    <div class="flex-1 overflow-y-auto">
+      <a class="text-slate-400 hover:text-white py-3 px-6 flex items-center gap-3 transition-colors hover:bg-slate-800/50 duration-200" href="index.html">
+        <span class="material-symbols-outlined">description</span>
+        <span>Bakalářská práce</span>
+      </a>
+
+      <div class="py-2">
+        <div class="text-slate-400 py-3 px-6 flex items-center gap-3">
+          <span class="material-symbols-outlined">videogame_asset</span>
+          <span>Hra Math4fun</span>
+        </div>
+
+        <div class="ml-12 border-l border-slate-700 mt-1 flex flex-col gap-1">
+          <a class="text-slate-300 hover:text-white py-2 pl-4 flex items-center transition-colors hover:bg-slate-800/50 duration-200" href="https://jakubsidlik.github.io/BC_hra_M/" target="_blank" rel="noopener noreferrer">
+            <span class="text-sm">Digitální verze</span>
+          </a>
+          <a class="border-l-4 border-blue-500 bg-blue-500/10 text-white font-medium py-2 pl-4 flex items-center transition-all hover:bg-slate-800/50 duration-200" href="#">
+            <span class="text-sm text-blue-400">Print&Play</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-6 mt-8">
+      <a id="download-print-sidebar" class="w-full bg-transparent border border-slate-600 text-slate-300 hover:text-white hover:border-slate-400 py-2 px-4 rounded transition-colors flex items-center justify-center gap-2" href="assets/pdf/print-play.pdf" download>
+        <span class="material-symbols-outlined text-[18px]">download</span>
+        Stáhnout PDF
+      </a>
+    </div>
+  </nav>
+
+  <main class="md:ml-[280px] w-full min-h-screen relative bg-white">
+    <header class="fixed top-0 right-0 md:w-[calc(100%-280px)] w-full z-40 bg-white/90 backdrop-blur-sm border-b border-slate-200 flex justify-between items-center h-14 px-4 md:px-8">
+      <a id="download-print-top" aria-label="Stáhnout Print&Play PDF" class="text-slate-500 hover:bg-slate-100 rounded-full p-2 transition-colors flex" href="assets/pdf/print-play.pdf" download>
+        <span class="material-symbols-outlined">download</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <button id="zoom-out" class="text-slate-500 hover:bg-slate-100 rounded-full p-2 transition-colors" aria-label="Zoom out">
+          <span class="material-symbols-outlined">zoom_out</span>
+        </button>
+        <div id="zoom-label" class="text-sm text-slate-600 px-2">100%</div>
+        <button id="zoom-in" class="text-slate-500 hover:bg-slate-100 rounded-full p-2 transition-colors" aria-label="Zoom in">
+          <span class="material-symbols-outlined">zoom_in</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="fixed top-14 md:left-[280px] left-0 right-0 h-[2px] bg-slate-200 z-40">
+      <div class="h-full bg-blue-600 w-full"></div>
+    </div>
+
+    <div class="pt-[80px] pb-24 px-4 md:px-8 h-screen overflow-y-auto pdf-scroll bg-slate-100 flex justify-center">
+      <div class="pdf-scale-layer w-full max-w-[900px]">
+        <div class="w-full bg-white border border-slate-200 min-h-[1100px] p-4 md:p-8 shadow-[0px_4px_20px_rgba(15,23,42,0.05)]">
+          <iframe
+            id="printplay-frame"
+            title="Náhled Print&Play"
+            src="about:blank"
+            class="w-full h-[1000px] border border-slate-200"
+          ></iframe>
+          <p class="text-xs text-slate-500 mt-3">
+            Pokud se PDF nenačte, zkontrolujte, že soubor existuje na cestě assets/pdf/print-play.pdf.
+          </p>
+          <div id="print-missing-pdf" class="hidden mt-4 border border-red-200 bg-red-50 text-red-700 px-4 py-3 rounded-lg text-sm">
+            PDF pro Print&Play nebylo nalezeno. Nahrajte soubor assets/pdf/print-play.pdf.
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    if (window.matchMedia("(max-width: 900px)").matches) {
+      window.location.replace("print-play-mobile.html");
+    }
+
+    const PRINT_PDF_PATH = "assets/pdf/print-play.pdf";
+    const root = document.documentElement;
+    const zoomLabel = document.getElementById("zoom-label");
+    const printFrame = document.getElementById("printplay-frame");
+    const printMissingPdf = document.getElementById("print-missing-pdf");
+    const printDownloadLinks = [
+      document.getElementById("download-print-sidebar"),
+      document.getElementById("download-print-top")
+    ];
+    let zoom = 1;
+
+    function disablePrintPdfActions() {
+      printDownloadLinks.forEach(function (link) {
+        if (!link) return;
+        link.classList.add("opacity-50", "pointer-events-none");
+        link.setAttribute("aria-disabled", "true");
+        link.removeAttribute("href");
+      });
+    }
+
+    async function ensurePrintPdf() {
+      printFrame.src = PRINT_PDF_PATH + "#view=FitH";
+
+      if (window.location.protocol === "file:") {
+        return;
+      }
+
+      try {
+        const response = await fetch(PRINT_PDF_PATH, { method: "HEAD", cache: "no-store" });
+        if (!response.ok) {
+          printMissingPdf.classList.remove("hidden");
+          disablePrintPdfActions();
+        }
+      } catch (error) {
+        // Keep iframe visible when HEAD check is unavailable.
+      }
+    }
+
+    function setZoom(newZoom) {
+      zoom = Math.min(1.8, Math.max(0.6, newZoom));
+      root.style.setProperty("--pdf-scale", zoom.toFixed(2));
+      zoomLabel.textContent = Math.round(zoom * 100) + "%";
+    }
+
+    document.getElementById("zoom-in").addEventListener("click", function () {
+      setZoom(zoom + 0.1);
+    });
+
+    document.getElementById("zoom-out").addEventListener("click", function () {
+      setZoom(zoom - 0.1);
+    });
+
+    ensurePrintPdf();
+  </script>
+</body>
+</html>
